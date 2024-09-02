@@ -1,0 +1,704 @@
+<html><head><base href="https://websim.io/social-network-android/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rosarus - Professional Social Network for Android</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary-color: #FF69B4;
+    --primary-dark: #FF1493;
+    --bg-color: #121212;
+    --card-bg-color: #1E1E1E;
+    --text-color: #FFFFFF;
+    --secondary-text-color: #B0B0B0;
+    --border-color: #333333;
+    --verified-blue: #1DA1F2;
+    --verified-gold: #FFD700;
+    --verified-red: #FF4500;
+    --verified-green: #00FF00;
+    --verified-purple: #8A2BE2;
+    --success-color: #4CAF50;
+    --error-color: #F44336;
+    --gradient-start: #FF69B4;
+    --gradient-end: #FF1493;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+
+  .app-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .nav-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .nav-button:hover {
+    color: var(--primary-color);
+  }
+
+  .post-form {
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .post-form textarea {
+    width: 100%;
+    height: 100px;
+    background-color: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    font-size: 16px;
+    resize: none;
+    margin-bottom: 15px;
+    padding: 10px;
+    transition: border-color 0.3s ease;
+  }
+
+  .post-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  .post-form button {
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .post-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255,105,180,0.3);
+  }
+
+  .post {
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .post:hover {
+    transform: translateY(-5px);
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 15px;
+    font-size: 20px;
+    box-shadow: 0 2px 4px rgba(255,105,180,0.3);
+  }
+
+  .user-details {
+    flex-grow: 1;
+  }
+
+  .username {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .handle, .timestamp {
+    color: var(--secondary-text-color);
+    font-size: 14px;
+  }
+
+  .content {
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+  }
+
+  .actions button {
+    background: none;
+    border: none;
+    color: var(--secondary-text-color);
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .actions button:hover {
+    color: var(--primary-color);
+  }
+
+  .actions button i {
+    margin-right: 5px;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-content {
+    background-color: var(--card-bg-color);
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .close {
+    color: var(--secondary-text-color);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .close:hover {
+    color: var(--primary-color);
+  }
+
+  .modal-header {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .modal-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-color);
+  }
+
+  .modal-body input, .modal-body select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background-color: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+
+  .modal-body input:focus, .modal-body select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  .modal-body button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .modal-body button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255,105,180,0.3);
+  }
+
+  .verification-options {
+    margin-top: 20px;
+  }
+
+  .verification-options label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-color);
+    font-weight: bold;
+  }
+
+  .verified-badge {
+    margin-left: 5px;
+    font-size: 0.9em;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  .verified-badge.blue { color: var(--verified-blue); }
+  .verified-badge.gold { color: var(--verified-gold); }
+  .verified-badge.red { color: var(--verified-red); }
+  .verified-badge.green { color: var(--verified-green); }
+  .verified-badge.purple { color: var(--verified-purple); }
+
+  .comments-section {
+    margin-top: 15px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+  }
+
+  .comment-form {
+    display: flex;
+    margin-top: 15px;
+  }
+
+  .comment-form input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background-color: rgba(255,255,255,0.05);
+    color: var(--text-color);
+    border-radius: 20px 0 0 20px;
+    font-size: 14px;
+  }
+
+  .comment-form button {
+    padding: 10px 15px;
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .comment-form button:hover {
+    background: linear-gradient(45deg, var(--gradient-end), var(--gradient-start));
+  }
+
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(45deg, var(--bg-color), var(--card-bg-color));
+    animation: gradientBG 10s ease infinite;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .login-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    animation: logoGlow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes logoGlow {
+    from { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+    to { text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color); }
+  }
+
+  .login-button {
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .login-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(255,105,180,0.3);
+  }
+
+  .login-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(255,105,180,0.2);
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
+    .app-container {
+      padding: 10px;
+    }
+
+    .post-form, .post {
+      padding: 15px;
+    }
+
+    .logo {
+      font-size: 24px;
+    }
+
+    .login-logo {
+      font-size: 48px;
+    }
+
+    .login-button {
+      padding: 12px 30px;
+      font-size: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="login-screen" class="login-container">
+    <div class="login-logo">Corvus🐦‍⬛</div>
+    <button class="login-button" onclick="enterApp()">Enter  Corvus🐦‍⬛</button>
+  </div>
+
+  <div id="app-content" class="hidden">
+    <div class="app-container">
+      <div class="header">
+        <span class="logo">Corvus🐦‍⬛</span>
+        <div>
+          <button class="nav-button" onclick="openProfileModal()"><i class="fas fa-user"></i></button>
+          <button class="nav-button" onclick="openChatModal()"><i class="fas fa-comment-dots"></i></button>
+          <button class="nav-button" onclick="openSettingsModal()"><i class="fas fa-cog"></i></button>
+        </div>
+      </div>
+      <div class="post-form">
+        <textarea id="post-content" placeholder="What's on your mind? Share your thoughts with the Rosarus community..."></textarea>
+        <button onclick="createPost()">Post</button>
+      </div>
+      <div id="posts-container"></div>
+    </div>
+
+    <div id="profile-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create Your Rosarus Profile</h2>
+          <span class="close" onclick="closeProfileModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="profile-name" placeholder="Full Name">
+          <input type="text" id="profile-handle" placeholder="@handle">
+          <input type="text" id="profile-bio" placeholder="Tell us about yourself...">
+          <div class="verification-options">
+            <label for="verification-status">Verification Status:</label>
+            <select id="verification-status">
+              <option value="none">Not Verified</option>
+              <option value="blue">Blue Verification</option>
+              <option value="gold">Gold Verification</option>
+              <option value="red">Red Verification</option>
+              <option value="green">Green Verification</option>
+              <option value="purple">Purple Verification</option>
+            </select>
+          </div>
+          <button onclick="createProfile()">Create Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="chat-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Rosarus Chat</h2>
+          <span class="close" onclick="closeChatModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>Chat feature coming soon!</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <span class="close" onclick="closeSettingsModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>Settings options coming soon!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script>
+    let posts = [];
+    let currentUser = null;
+
+    function enterApp() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app-content').classList.remove('hidden');
+      renderPosts();
+    }
+
+    function createPost() {
+      const content = document.getElementById('post-content').value;
+      if (content.trim() === '') return;
+
+      const post = {
+        id: Date.now(),
+        username: currentUser ? currentUser.name : 'Anonymous',
+        handle: currentUser ? currentUser.handle : '@anonymous',
+        content: content,
+        timestamp: new Date().toISOString(),
+        likes: 0,
+        comments: [],
+        shares: 0,
+        verified: currentUser ? currentUser.verified : null
+      };
+
+      posts.unshift(post);
+      document.getElementById('post-content').value = '';
+      renderPosts();
+    }
+
+    function renderPosts() {
+      const container = document.getElementById('posts-container');
+      container.innerHTML = '';
+
+      posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+          <div class="user-info">
+            <div class="avatar">${post.username[0].toUpperCase()}</div>
+            <div class="user-details">
+              <span class="username">${post.username}
+                ${post.verified ? `<i class="fas fa-check-circle verified-badge ${post.verified}"></i>` : ''}
+              </span>
+              <span class="handle">${post.handle}</span>
+              <span class="timestamp">${moment(post.timestamp).fromNow()}</span>
+            </div>
+          </div>
+          <p class="content">${post.content}</p>
+          <div class="actions">
+            <button onclick="likePost(${post.id})"><i class="far fa-heart"></i> <span>${post.likes}</span></button>
+            <button onclick="toggleComments(${post.id})"><i class="far fa-comment"></i> <span>${post.comments.length}</span></button>
+            <button onclick="sharePost(${post.id})"><i class="fas fa-share"></i> <span>${post.shares}</span></button>
+          </div>
+          <div class="comments-section" id="comments-${post.id}" style="display: none;">
+            <div class="comments-container"></div>
+            <div class="comment-form">
+              <input type="text" placeholder="Write a comment..." id="comment-input-${post.id}">
+              <button onclick="addComment(${post.id})">Send</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(postElement);
+      });
+    }
+
+    function likePost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        post.likes++;
+        renderPosts();
+      }
+    }
+
+    function toggleComments(postId) {
+      const commentsSection = document.getElementById(`comments-${postId}`);
+      commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addComment(postId) {
+      const post = posts.find(p => p.id === postId);
+      const commentInput = document.getElementById(`comment-input-${postId}`);
+      const commentContent = commentInput.value.trim();
+
+      if (post && commentContent) {
+        post.comments.push({
+          username: currentUser ? currentUser.name : 'Anonymous',
+          content: commentContent,
+          timestamp: new Date().toISOString()
+        });
+        commentInput.value = '';
+        renderPosts();
+      }
+    }
+
+    function sharePost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        post.shares++;
+        renderPosts();
+      }
+    }
+
+    function openProfileModal() {
+      document.getElementById('profile-modal').style.display = 'block';
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').style.display = 'none';
+    }
+
+    function openChatModal() {
+      document.getElementById('chat-modal').style.display = 'block';
+    }
+
+    function closeChatModal() {
+      document.getElementById('chat-modal').style.display = 'none';
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settings-modal').style.display = 'block';
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').style.display = 'none';
+    }
+
+    function createProfile() {
+      const name = document.getElementById('profile-name').value;
+      const handle = document.getElementById('profile-handle').value;
+      const bio = document.getElementById('profile-bio').value;
+      const verificationStatus = document.getElementById('verification-status').value;
+
+      if (name && handle) {
+        currentUser = {
+          name: name,
+          handle: handle,
+          bio: bio,
+          verified: verificationStatus !== 'none' ? verificationStatus : null
+        };
+        closeProfileModal();
+        alert('Profile created successfully!');
+      } else {
+        alert('Please fill in at least the name and handle fields.');
+      }
+    }
+
+    // Initialize with some example posts
+    posts = [
+      {
+        id: 1,
+        username: 'Rosarus Official',
+        handle: '@rosarus',
+        content: 'Welcome to Rosarus, the most elegant social network in black and pink! Share your most intense moments and connect with passionate souls. 🌹✨ #RosarusLaunch',
+        timestamp: new Date().toISOString(),
+        likes: 1253,
+        comments: [],
+        shares: 589,
+        verified: 'blue'
+      },
+      {
+        id: 2,
+        username: 'Almirante seung',
+        handle: '@seung',
+        content: 'fico imaginando 🤔 Alexandre de Moraes acordado e se olhando no espelho e pensando puta merda sou o careca mais poderoso do Brasil!',
+        timestamp: new Date(Date.now() - 3600000).toISOString(),
+        likes: 978,
+        comments: [],
+        shares: 223,
+        verified: 'gold'
+      },
+      {
+        id: 3,
+        username: 'Tech in Rose',
+        handle: '@techrose',
+        content: 'Black is power, pink is attitude! We\'re developing gadgets that combine style and functionality. The future is bold and colorful! 🌸💻 #TechInRose #RosarusTech',
+        timestamp: new Date(Date.now() - 7200000).toISOString(),
+        likes: 1521,
+        comments: [],
+        shares: 402,
+        verified: 'purple'
+      }
+    ];
+
+    // Don't render posts initially, wait for user to enter the app
+  </script>
+</body>
+</html>
